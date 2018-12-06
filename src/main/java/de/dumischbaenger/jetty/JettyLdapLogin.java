@@ -380,7 +380,17 @@ public class JettyLdapLogin extends AbstractLoginModule {
     return roleList;
   }
 
-  /**
+ @Override
+public Callback[] configureCallbacks() {
+     Callback[] callbacks = new Callback[4];
+     callbacks[0] = new NameCallback("Enter user name");
+     callbacks[1] = new ObjectCallback();
+     callbacks[2] = new PasswordCallback("Enter password", false); //only used if framework does not support the ObjectCallback
+     callbacks[3] = new ServletRequestCallback();
+	return callbacks;
+}
+
+/**
    * since ldap uses a context bind for valid authentication checking, we override
    * login()
    * <p>
@@ -400,12 +410,7 @@ public class JettyLdapLogin extends AbstractLoginModule {
         throw new LoginException("No callback handler");
       }
 
-//      Callback[] callbacks = configureCallbacks();
-      Callback[] callbacks = new Callback[4];
-      callbacks[0] = new NameCallback("Enter user name");
-      callbacks[1] = new ObjectCallback();
-      callbacks[2] = new PasswordCallback("Enter password", false); //only used if framework does not support the ObjectCallback
-      callbacks[3] = new ServletRequestCallback();
+      Callback[] callbacks = configureCallbacks();
       
       getCallbackHandler().handle(callbacks);
 
