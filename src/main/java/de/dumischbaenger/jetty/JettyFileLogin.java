@@ -2,6 +2,9 @@ package de.dumischbaenger.jetty;
 
 import java.io.IOException;
 
+
+// this work is based on https://github.com/eclipse/jetty.project/blob/jetty-9.4.x/jetty-jaas/src/main/java/org/eclipse/jetty/jaas/spi/PropertyFileLoginModule.java
+
 //
 //========================================================================
 //Copyright (c) 1995-2018 Mort Bay Consulting Pty. Ltd.
@@ -186,9 +189,12 @@ public boolean login() throws LoginException
         
         
         String pwShort = "unknown";
-        if (webCredential instanceof String) {
+        if (webCredential!=null && webCredential instanceof String) {
           String pw = (String) webCredential;
-          pwShort = pw.charAt(0) + "..." + pw.charAt(pw.length() - 1);
+          
+          if(pw.length()>1) {
+            pwShort = pw.charAt(0) + "..." + pw.charAt(pw.length() - 1);
+          }
         }
         LOG.info("using username: " + webUserName + ", password (shortened): " + pwShort);
 
